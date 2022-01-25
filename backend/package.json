@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend of the webapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dusart Victor",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "firebase-admin": "^10.0.2",
+    "google-auth-library": "^7.11.0"
+  }
+}

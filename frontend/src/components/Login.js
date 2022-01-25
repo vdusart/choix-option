@@ -1,9 +1,9 @@
 import { GoogleLogin } from 'react-google-login';
 import { clientId } from "./../private/firebase";
 
-function Login() {
+function Login({ setCurrentUser }) {
 	const onSuccess = (res) => {
-		console.log("[Login Success] currentUser: " + res.profileObj);
+		setCurrentUser(res.profileObj);
 	}
 
 	const onFailure = (err) => {

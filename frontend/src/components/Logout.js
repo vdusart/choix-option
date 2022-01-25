@@ -2,9 +2,9 @@ import { GoogleLogout } from 'react-google-login';
 import { clientId } from "../private/firebase";
 
 
-function Logout() {
+function Logout({ setCurrentUser }) {
 	const onSuccess = () => {
-		alert("[Logout Success]");
+		setCurrentUser(null);
 	}
 
 	return (
@@ -12,7 +12,7 @@ function Logout() {
 			<GoogleLogout
 				clientId={clientId}
 				buttonText="Logout"
-				onSuccess={onSuccess}
+				onLogoutSuccess={onSuccess}
 			/>
 		</div>
 	)

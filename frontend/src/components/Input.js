@@ -1,15 +1,32 @@
 import { useState } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 
 function Input({ tokenId }) {
+	const possibleChoicesGSI = ['choice1', 'choice2', 'choice3', 'choice4', 'choice5']
+
 	const subjectsGSI = ["ECE", "LV1", "Micro", "Archi Reseau", "Cyber", "DES PAT", "JEE", "Stats", "IA", "Tests verif"];
 	const subjectsGMI = ["ECE", "LV1", "Micro", "ARCH RES", "DECIDABILITE", "METH AGIL", "PROG FONC", "DATAMINING", "EDP", "MOD LIN", "OPTIM"];
 	const [subjects, changeSubjects] = useState(subjectsGSI);
 	const [fields, setFields] = useState({});
 	const [uniqueId, setUniqueId] = useState("");
+	const [choices, updateChoices] = useState(possibleChoicesGSI);
+
+	let option = "GSI";
+
+	function handleOnDragEnd(result) {
+		if (!result.destination) return;
+
+		const items = Array.from(choices);
+		const [reorderedItem] = items.splice(result.source.index, 1);
+		items.splice(result.destination.index, 0, reorderedItem);
+
+		updateChoices(items);
+	}
 
 	let changeOption = (event) => {
-		if (event.target.value === "GMI") {
+		option = event.target.value;
+		if (option === "GMI") {
 			changeSubjects(subjectsGMI);
 		} else {
 			changeSubjects(subjectsGSI);
@@ -27,10 +44,16 @@ function Input({ tokenId }) {
 	let submitForm = () => {
 		console.log(fields);
 		setUniqueId("Loading...");
+		const data = {
+			"option": option,
+			"marks": fields,
+			choices: []
+		}
+		console.log(data);
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ tokenId: tokenId, data: fields })
+			body: JSON.stringify({ tokenId: tokenId, data: data })
 		};
 		fetch('http://localhost:8000/sendData', requestOptions)
 			.then(async response => {
@@ -50,6 +73,32 @@ function Input({ tokenId }) {
 					{(uniqueId === "") ?
 						<div className="form-horizontal">
 							<p className="has-text-centered title has-text-danger">Vous devez entrez vos notes d'avant rattrapages!</p>
+
+
+							<DragDropContext onDragEnd={handleOnDragEnd}>
+								<Droppable droppableId="characters">
+									{(provided) => (
+										<ul className="characters" {...provided.droppableProps} ref={provided.innerRef}>
+											{choices.map((choice, index) => {
+												return (
+													<Draggable key={choice} draggableId={choice} index={index}>
+														{(provided) => (
+															<li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+																<p>
+																	{(index + 1) + "-" + choice}
+																</p>
+															</li>
+														)}
+													</Draggable>
+												);
+											})}
+											{provided.placeholder}
+										</ul>
+									)}
+								</Droppable>
+							</DragDropContext>
+
+
 							<fieldset>
 								<div className="field">
 									<label className="label" for="option-choice">Quelle est votre option ?</label>

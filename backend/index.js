@@ -54,21 +54,33 @@ app.post('/sendData', async (req, res) => {
 	}
 	const email = resultTokenValid.email.split("@")[0];
 
+
 	const data = req.body.data;
+	if (data == undefined) {
+		res.json({ result: "error, missing data" });
+		return;
+	}
 	const option = data.option;
 	const marks = data.marks;
-	if (true && !Utils.checkMarks(option, marks)) {
+	const choices = data.choices;
+	if (option == undefined || marks == undefined || choices == undefined) {
+		res.json({ result: "error, missing data" });
+		return;
+	}
+
+
+
+	if (!Utils.checkMarks(option, marks)) {
 		res.json({ result: "error, marks invalid" });
 		return;
 	}
 
-	const choices = data.choices;
 	if (!Utils.checkChoices(option, choices)) {
 		res.json({ result: "error, choices invalid" });
 		return;
 	}
 
-	const uniqueId = Utils.generateUniqueId();
+	const uniqueId = Utils.generateUniqueId(anonymousData);
 	const dataToSend = {
 		option: option,
 		marks: marks,

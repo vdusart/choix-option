@@ -3,7 +3,7 @@ import { clientId } from "./../private/firebase";
 
 function Login({ setCurrentUser }) {
 	const onSuccess = (res) => {
-		setCurrentUser(res.profileObj);
+		setCurrentUser(res);
 		// console.log(res.tokenId);
 	}
 

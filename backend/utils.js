@@ -6,8 +6,8 @@ const client = new OAuth2Client(CLIENT_ID);
 
 class Utils {
 
-	static subjectsGSI = { "ECE": 1, "LV1": 2.5, "Micro": 1.5, "Archi Reseau": 3, "Cyber": 2, "DES PAT": 3, "JEE": 4.5, "Stats": 4.5, "IA": 4.5, "Tests verif": 2 };
-	static subjectsGMI = { "ECE": 1, "LV1": 2.5, "Micro": 1.5, "Archi Reseau": 3, "DECIDABILITE": 2, "METH AGIL": 1, "PROG FONC": 3.5, "DATAMINING": 4.5, "EDP": 4.5, "MOD LIN": 2, "OPTIM": 2 };
+	static subjectsGSI = { "ECE": 1, "LV1": 2.5, "MICRO": 1.5, "ARCH RES": 3, "CYBER": 2, "DES PAT": 3, "JEE": 4.5, "STATS": 4.5, "IA": 4.5, "TESTS VERIF": 2 };
+	static subjectsGMI = { "ECE": 1, "LV1": 2.5, "MICRO": 1.5, "ARCH RES": 3, "DECIDABILITE": 2, "METH AGIL": 1, "PROG FONC": 3.5, "DATAMINING": 4.5, "EDP": 4.5, "MOD LIN": 2, "OPTIM": 2 };
 
 	static choicesGSI = { "BI": 30, "Visual": 30, "INEM": 30, "Cyber": 30, "ICC": 30, "IA Pau": 30, "IA Cergy": 30, "HPDA": 30 };
 	static choicesGMI = { "BI": 30, "IA Pau": 30, "IA Cergy": 30, "HPDA": 30, "DS": 30, "Fintech": 30 };

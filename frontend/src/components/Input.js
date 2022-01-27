@@ -3,9 +3,10 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 
 function Input({ tokenId }) {
-	const possibleChoicesGSI = ["BI", "Visual", "INEM", "Cyber", "ICC", "IA Pau", "IA Cergy", "HPDA"]
-	const subjectsGSI = ["ECE", "LV1", "Micro", "Archi Reseau", "Cyber", "DES PAT", "JEE", "Stats", "IA", "Tests verif"];
-	const subjectsGMI = ["ECE", "LV1", "Micro", "ARCH RES", "DECIDABILITE", "METH AGIL", "PROG FONC", "DATAMINING", "EDP", "MOD LIN", "OPTIM"];
+	const possibleChoicesGSI = ["BI", "Visual", "INEM", "Cyber", "ICC", "IA Pau", "IA Cergy", "HPDA"];
+	const possibleChoicesGMI = ["BI", "IA Pau", "IA Cergy", "HPDA", "DS", "Fintech"];
+	const subjectsGSI = ["ECE", "LV1", "MICRO", "ARCH RES", "CYBER", "DES PAT", "JEE", "STATS", "IA", "TESTS VERIF"];
+	const subjectsGMI = ["ECE", "LV1", "MICRO", "ARCH RES", "DECIDABILITE", "METH AGIL", "PROG FONC", "DATAMINING", "EDP", "MOD LIN", "OPTIM"];
 
 	const [subjects, changeSubjects] = useState(subjectsGSI);
 	const [fields, setFields] = useState({});
@@ -28,8 +29,10 @@ function Input({ tokenId }) {
 		option = event.target.value;
 		if (option === "GMI") {
 			changeSubjects(subjectsGMI);
+			updateChoices(possibleChoicesGMI);
 		} else {
 			changeSubjects(subjectsGSI);
+			updateChoices(possibleChoicesGSI);
 		}
 	}
 
@@ -65,6 +68,10 @@ function Input({ tokenId }) {
 			});
 	}
 
+	function refreshPage() {
+		window.location.reload(false);
+	}
+
 
 	return (
 		<div className="container">
@@ -72,9 +79,20 @@ function Input({ tokenId }) {
 				<div className="column is-half">
 					{(uniqueId === "") ?
 						<div className="form-horizontal">
-							<p className="has-text-centered title has-text-danger">Vous devez entrez vos notes d'avant rattrapages!</p>
 
+							<div className="field">
+								<label className="label">Quelle est votre option ?</label>
+								<div className="control">
+									<div className="select">
+										<select id="option-choice" className="" onChange={changeOption}>
+											<option>GSI</option>
+											<option>GMI</option>
+										</select>
+									</div>
+								</div>
+							</div>
 
+							<p className="has-text-centered title has-text-danger">Triez vos options par preferences</p>
 							<DragDropContext onDragEnd={handleOnDragEnd}>
 								<Droppable droppableId="characters">
 									{(provided) => (
@@ -98,45 +116,40 @@ function Input({ tokenId }) {
 								</Droppable>
 							</DragDropContext>
 
+							<p className="has-text-centered title has-text-danger">Vous devez entrez vos notes d'avant rattrapages!</p>
 
-							<fieldset>
-								<div className="field">
-									<label className="label" for="option-choice">Quelle est votre option ?</label>
+							{subjects.map((item) =>
+								< div className="field" key={item}>
+									<label className="label">{item}</label>
 									<div className="control">
-										<div className="select">
-											<select id="option-choice" name="option-choice" className="" onChange={changeOption}>
-												<option>GSI</option>
-												<option>GMI</option>
-											</select>
-										</div>
+										<input name={item} type="text" placeholder="Note" className="input" value={fields[item] || ""} onChange={changeField} />
 									</div>
 								</div>
-
-								{subjects.map((item) =>
-									< div className="field">
-										<label className="label">{item}</label>
-										<div className="control">
-											<input name={item} type="text" placeholder="Note" className="input" value={fields[item] || ""} onChange={changeField} />
-										</div>
-									</div>
-								)}
-
+							)}
+							<div className="box has-background-danger">
 								<p>Attention, une fois vos notes entrées vous ne pourrez plus les modifier.</p>
 								<p>Comme elles sont sauvegardées de manière completement anonnyme, nous ne pourrons pas le faire pour vous.</p>
+							</div>
 
-								<div class="field is-grouped">
-									<div class="control">
-										<button class="button is-link" onClick={submitForm}>Submit</button>
-									</div>
-									<div class="control">
-										<button class="button is-link is-light">Cancel</button>
-									</div>
+							<div className="field is-grouped">
+								<div className="control">
+									<button className="button is-link" onClick={submitForm}>Submit</button>
 								</div>
-							</fieldset>
+								<div className="control">
+									<button className="button is-link is-light">Cancel</button>
+								</div>
+							</div>
 						</div>
 						:
 						<div>
-							<p>Votre unique id est : {uniqueId}</p>
+							<div className="box has-background-success mb-6">
+								<p>Votre unique id est : <span className="has-text-weight-bold">{uniqueId}</span></p>
+							</div>
+							<div className="box has-background-warning">
+								<p>Ne cliquez pas sur le bouton tant que vous n'avez pas sauvegardé cet identifiant!</p>
+								<p className="has-text-weight-bold">Il ne pourra pas vous être redonné!</p>
+								<button className="button is-link is-light" onClick={refreshPage}>Acceder à mes infos</button>
+							</div>
 						</div>
 					}
 				</div >

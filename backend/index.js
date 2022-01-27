@@ -24,23 +24,29 @@ let emailsLocked = [];
 database.ref('/emailsLocked').on('value', (snapshot) => {
 	emailsLocked = [];
 	snapshot.forEach((i) => {
-		emailsLocked.push(i.val());
+		emailsLocked.push(i.key);
 	});
 })
 let anonymousData = {};
 database.ref('/anonymous').on('value', (snapshot) => {
-	anonymousData = [];
+	anonymousData = {};
 	snapshot.forEach((i) => {
 		anonymousData[i.key] = i.val();
 	});
 })
 
-
+app.post('/getInfosOf', (req, res) => {
+	const uid = req.body.uid;
+	let result = anonymousData[uid];
+	result['classement'] = "?/?";
+	res.json(result);
+})
 
 app.post('/needToImportData', async (req, res) => {
 	const tokenId = req.body.tokenId;
 	const result = await Utils.isTokenValid(tokenId);
-	const needToImportData = (!result.isValid) ? 0 : (!emailsLocked.includes(result.email) ? 1 : 2);
+	const emailPrefix = result.email.split('@')[0];
+	const needToImportData = (!result.isValid) ? 0 : (!emailsLocked.includes(emailPrefix) ? 1 : 2);
 	res.json({ result: needToImportData })
 })
 

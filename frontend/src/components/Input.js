@@ -3,10 +3,10 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 
 function Input({ tokenId }) {
-	const possibleChoicesGSI = ['choice1', 'choice2', 'choice3', 'choice4', 'choice5']
-
+	const possibleChoicesGSI = ["BI", "Visual", "INEM", "Cyber", "ICC", "IA Pau", "IA Cergy", "HPDA"]
 	const subjectsGSI = ["ECE", "LV1", "Micro", "Archi Reseau", "Cyber", "DES PAT", "JEE", "Stats", "IA", "Tests verif"];
 	const subjectsGMI = ["ECE", "LV1", "Micro", "ARCH RES", "DECIDABILITE", "METH AGIL", "PROG FONC", "DATAMINING", "EDP", "MOD LIN", "OPTIM"];
+
 	const [subjects, changeSubjects] = useState(subjectsGSI);
 	const [fields, setFields] = useState({});
 	const [uniqueId, setUniqueId] = useState("");
@@ -47,7 +47,7 @@ function Input({ tokenId }) {
 		const data = {
 			"option": option,
 			"marks": fields,
-			choices: []
+			choices: choices
 		}
 		console.log(data);
 		const requestOptions = {
@@ -78,14 +78,14 @@ function Input({ tokenId }) {
 							<DragDropContext onDragEnd={handleOnDragEnd}>
 								<Droppable droppableId="characters">
 									{(provided) => (
-										<ul className="characters" {...provided.droppableProps} ref={provided.innerRef}>
+										<ul className="box has-background-grey" {...provided.droppableProps} ref={provided.innerRef}>
 											{choices.map((choice, index) => {
 												return (
 													<Draggable key={choice} draggableId={choice} index={index}>
 														{(provided) => (
-															<li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+															<li className="box" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
 																<p>
-																	{(index + 1) + "-" + choice}
+																	{(index + 1) + " - " + choice}
 																</p>
 															</li>
 														)}

@@ -6,6 +6,7 @@ function Results() {
 	const [choices, setChoices] = useState([]);
 	const [marks, setMarks] = useState([]);
 	const [classement, setClassement] = useState("?/?");
+	const [error, setError] = useState("");
 
 	const changeUniqueId = (id) => {
 		setUniqueId(id);
@@ -17,9 +18,14 @@ function Results() {
 		fetch('http://localhost:8000/getInfosOf', requestOptions)
 			.then(async response => {
 				const data = await response.json();
-				setChoices(data.choices);
-				setMarks(data.marks);
-				setClassement(data.classement);
+				if (data.error !== undefined) {
+					setUniqueId(null);
+					setError(data.error);
+				} else {
+					setChoices(data.choices);
+					setMarks(data.marks);
+					setClassement(data.classement);
+				}
 			})
 			.catch(error => {
 				console.error('error:', error);
@@ -29,7 +35,7 @@ function Results() {
 	return (
 		<div className="container">
 			{(uniqueId == null) ?
-				<InputUniqueId changeUniqueId={changeUniqueId} />
+				<InputUniqueId changeUniqueId={changeUniqueId} error={error} />
 				:
 				<DisplayResult marks={marks} choices={choices} classement={classement} />
 			}
@@ -67,15 +73,16 @@ function DisplayResult({ choices, marks, classement }) {
 	)
 }
 
-function InputUniqueId({ changeUniqueId }) {
-	const [currentUniqueId, setCurrentUniqueId] = useState(null);
+function InputUniqueId({ changeUniqueId, error }) {
+	const [currentUniqueId, setCurrentUniqueId] = useState("");
 
 	let changeInputField = (e) => {
 		setCurrentUniqueId(e.target.value);
 	}
 
 	let submitId = () => {
-		changeUniqueId(currentUniqueId);
+		if (currentUniqueId !== "")
+			changeUniqueId(currentUniqueId);
 	}
 
 	return (
@@ -86,6 +93,7 @@ function InputUniqueId({ changeUniqueId }) {
 					<div className="column">
 						<div className="control">
 							<input className="input" type="text" placeholder="Votre id..." onChange={changeInputField} />
+							<p className="help is-danger">{error}</p>
 						</div>
 					</div>
 

@@ -37,9 +37,14 @@ database.ref('/anonymous').on('value', (snapshot) => {
 
 app.post('/getInfosOf', (req, res) => {
 	const uid = req.body.uid;
-	let result = anonymousData[uid];
-	result['classement'] = "?/?";
-	res.json(result);
+	try {
+		let result = anonymousData[uid];
+		result['classement'] = "?/?";
+		res.json(result);
+
+	} catch (error) {
+		res.json({ error: "Incorrect id" })
+	}
 })
 
 app.post('/needToImportData', async (req, res) => {

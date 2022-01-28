@@ -80,7 +80,6 @@ app.post('/sendData', async (req, res) => {
 	}
 
 
-
 	if (!Utils.checkMarks(option, marks)) {
 		res.json({ result: "error, marks invalid" });
 		return;
@@ -92,15 +91,25 @@ app.post('/sendData', async (req, res) => {
 	}
 
 	const uniqueId = Utils.generateUniqueId(anonymousData);
+	const [mean, ECTS] = Utils.calculateMeanAndECTS(option, marks);
+
 	const dataToSend = {
 		option: option,
 		marks: marks,
-		choices: choices
+		choices: choices,
+		mean: mean,
+		ECTS: ECTS
 	};
 
-	database.ref('/anonymous/' + uniqueId).update(dataToSend);
-	database.ref('/emailsLocked/' + email).update({ locked: true });
-	res.json({ result: uniqueId });
+
+
+	const classement = Utils.createClassement(anonymousData);
+
+	// database.ref('/anonymous/' + uniqueId).update(dataToSend);
+	// database.ref('/emailsLocked/' + email).update({ locked: true });
+	// save new classement
+	// res.json({ result: uniqueId });
+	res.json({ result: dataToSend });
 })
 
 

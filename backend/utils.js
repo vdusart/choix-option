@@ -6,8 +6,17 @@ const client = new OAuth2Client(CLIENT_ID);
 
 class Utils {
 
-	static subjectsGSI = { "ECE": 1, "LV1": 2.5, "MICRO": 1.5, "ARCH RES": 3, "CYBER": 2, "DES PAT": 3, "JEE": 4.5, "STATS": 4.5, "IA": 4.5, "TESTS VERIF": 2 };
-	static subjectsGMI = { "ECE": 1, "LV1": 2.5, "MICRO": 1.5, "ARCH RES": 3, "DECIDABILITE": 2, "METH AGIL": 1, "PROG FONC": 3.5, "DATAMINING": 4.5, "EDP": 4.5, "MOD LIN": 2, "OPTIM": 2 };
+	static subjectsGSI = {
+		"TC": { "ECE": 1, "LV1": 2.5, "MICRO": 1.5 },
+		"INFO": { "ARCH RES": 3, "CYBER": 2, "DES PAT": 3, "JEE": 4.5, "TESTS VERIF": 2 },
+		"MATH": { "STATS": 4.5, "IA": 4.5 }
+	};
+
+	static subjectsGMI = {
+		"TC": { "ECE": 1, "LV1": 2.5, "MICRO": 1.5 },
+		"INFO": { "PROG FONC": 3.5, "DECIDABILITE": 2, "ARCH RES": 3, "METH AGIL": 1 },
+		"MATH": { "MOD LIN": 2, "DATAMINING": 4.5, "OPTIM": 2, "EDP": 4.5 }
+	};
 
 	static choicesGSI = { "BI": 30, "Visual": 30, "INEM": 30, "Cyber": 30, "ICC": 30, "IA Pau": 30, "IA Cergy": 30, "HPDA": 30 };
 	static choicesGMI = { "BI": 30, "IA Pau": 30, "IA Cergy": 30, "HPDA": 30, "DS": 30, "Fintech": 30 };
@@ -42,9 +51,11 @@ class Utils {
 
 	static checkMarks(option, marks) {
 		const subjects = (option === "GMI") ? Utils.subjectsGMI : Utils.subjectsGSI;
-		for (const subject in subjects) {
-			if (!(subject in marks)) {
-				return false;
+		for (const UE in subjects) {
+			for (const subject in subjects[UE]) {
+				if (!(subject in marks)) {
+					return false;
+				}
 			}
 		}
 
@@ -71,6 +82,37 @@ class Utils {
 		}
 
 		return true;
+	}
+
+
+	static calculateMeanAndECTS(option, marks) {
+		const subjects = (option === "GMI") ? Utils.subjectsGMI : Utils.subjectsGSI;
+		let ECTS = 0;
+		let mean = 0;
+		let totalCoef = 0;
+
+		for (const UE in subjects) {
+			let meanInUE = 0;
+			let coefOfUE = 0;
+			for (const subject in subjects[UE]) {
+				const mark = marks[subject];
+				const coef = subjects[UE][subject];
+				meanInUE += mark * coef;
+				coefOfUE += coef;
+			}
+			ECTS += (meanInUE / coefOfUE >= 10) ? coefOfUE : 0;
+			mean += meanInUE;
+			totalCoef += coefOfUE;
+		}
+
+		return [mean / totalCoef, ECTS];
+	}
+
+
+	static createClassement(anonymousData) {
+		let classement = {};
+
+		console.log(anonymousData);
 	}
 }
 

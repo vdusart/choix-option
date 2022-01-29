@@ -4,7 +4,6 @@ import { clientId } from "./../private/firebase";
 function Login({ setCurrentUser }) {
 	const onSuccess = (res) => {
 		setCurrentUser(res);
-		// console.log(res.tokenId);
 	}
 
 	const onFailure = (err) => {

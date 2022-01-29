@@ -45,14 +45,12 @@ function Input({ tokenId }) {
 	}
 
 	let submitForm = () => {
-		console.log(fields);
 		setUniqueId("Loading...");
 		const data = {
 			"option": option,
 			"marks": fields,
 			choices: choices
 		}
-		console.log(data);
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },

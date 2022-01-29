@@ -18,7 +18,7 @@ class Utils {
 		"MATH": { "MOD LIN": 2, "DATAMINING": 4.5, "OPTIM": 2, "EDP": 4.5 }
 	};
 
-	static choicesGSI = { "BI": 30, "Visual": 30, "INEM": 30, "Cyber": 30, "ICC": 30, "IA Pau": 30, "IA Cergy": 30, "HPDA": 30 };
+	static choicesGSI = { "BI": 30, "Visual": 30, "INEM": 30, "Cyber": 30, "ICC": 3, "IA Pau": 30, "IA Cergy": 30, "HPDA": 30 };
 	static choicesGMI = { "BI": 30, "IA Pau": 30, "IA Cergy": 30, "HPDA": 30, "DS": 30, "Fintech": 30 };
 
 	static generateUniqueId(anonymousData) {
@@ -108,11 +108,56 @@ class Utils {
 		return [mean / totalCoef, ECTS];
 	}
 
+	static createClassementStructure() {
+		let classement = {};
+
+		classement["GSI"] = {};
+		for (const choice in Utils.choicesGSI) {
+			classement["GSI"][choice] = { "size": Utils.choicesGSI[choice], "classement": [] };
+		}
+		classement["GMI"] = {};
+		for (const choice in Utils.choicesGMI) {
+			classement["GMI"][choice] = { "size": Utils.choicesGMI[choice], "classement": [] };
+		}
+
+		return classement;
+	}
 
 	static createClassement(anonymousData) {
 		let classement = {};
+		classement = Utils.createClassementStructure();
 
-		console.log(anonymousData);
+		var studentsSorted = Object.keys(anonymousData).map((key) => [key, anonymousData[key]]);
+
+		studentsSorted.sort(
+			(a, b) => {
+				const ECTSA = a[1]["ECTS"];
+				const ECTSB = b[1]["ECTS"];
+				const meanA = a[1]["mean"];
+				const meanB = b[1]["mean"];
+				return (ECTSA != ECTSB) ? (ECTSB - ECTSA) : meanB - meanA;
+			}
+		);
+
+		for (const element of studentsSorted) {
+			const studentId = element[0];
+			const student = element[1];
+			const studentOption = student["option"];
+
+			let possibleChoice;
+			let optionSize;
+			let optionClassementLength;
+			let i = 0;
+			do {
+				possibleChoice = student.choices[i];
+				i++;
+				optionSize = classement[studentOption][possibleChoice]["size"];
+				optionClassementLength = classement[studentOption][possibleChoice]["classement"].length;
+			} while ((optionClassementLength + 1 > optionSize) && (i < 8));
+
+			classement[studentOption][possibleChoice]["classement"].push(studentId);
+		}
+		return classement;
 	}
 }
 

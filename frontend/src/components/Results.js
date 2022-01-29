@@ -6,6 +6,7 @@ function Results() {
 	const [choices, setChoices] = useState([]);
 	const [marks, setMarks] = useState([]);
 	const [classement, setClassement] = useState("?/?");
+	const [possibleChoice, setPossibleChoice] = useState("");
 	const [error, setError] = useState("");
 
 	const changeUniqueId = (id) => {
@@ -25,6 +26,7 @@ function Results() {
 					setChoices(data.choices);
 					setMarks(data.marks);
 					setClassement(data.classement);
+					setPossibleChoice(data.possibleChoice);
 				}
 			})
 			.catch(error => {
@@ -37,17 +39,18 @@ function Results() {
 			{(uniqueId == null) ?
 				<InputUniqueId changeUniqueId={changeUniqueId} error={error} />
 				:
-				<DisplayResult marks={marks} choices={choices} classement={classement} />
+				<DisplayResult marks={marks} choices={choices} classement={classement} possibleChoice={possibleChoice} />
 			}
 		</div>
 	)
 }
 
-function DisplayResult({ choices, marks, classement }) {
+function DisplayResult({ choices, marks, classement, possibleChoice }) {
+	const choicePosition = choices.findIndex(choice => choice === possibleChoice) + 1;
 	return (
 		<div className="container">
 
-			<p>D'apres nos estimations, vous êtes classés <span className="has-text-weight-bold">{classement}</span> dans votre option favorite: <span className="has-text-weight-bold">{choices[0]}</span></p>
+			<p>D'après nos estimations, vous êtes classés <span className="has-text-weight-bold">{classement}</span> dans votre option {choicePosition}: <span className="has-text-weight-bold">{possibleChoice}</span></p>
 
 			<div className="box">
 				<div className="columns">

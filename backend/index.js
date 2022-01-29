@@ -34,13 +34,30 @@ database.ref('/anonymous').on('value', (snapshot) => {
 		anonymousData[i.key] = i.val();
 	});
 })
+let classement = {};
+database.ref('/classement').on('value', (snapshot) => {
+	classement = {};
+	snapshot.forEach((i) => {
+		classement[i.key] = i.val();
+	});
+})
 
 app.post('/getInfosOf', (req, res) => {
 	const uid = req.body.uid;
 	try {
 		let result = anonymousData[uid];
-		result['classement'] = "?/?";
-		res.json(result);
+		const option = result["option"];
+
+		for (const [key, value] of Object.entries(classement[option])) {
+			const classementOfOption = value["classement"] || [];
+			const findIndex = classementOfOption.findIndex(id => id == uid);
+			if (findIndex >= 0) {
+				result['possibleChoice'] = key;
+				result['classement'] = findIndex + "/" + value["size"];
+				res.json(result);
+				return;
+			}
+		}
 
 	} catch (error) {
 		res.json({ error: "Incorrect id" })
@@ -101,15 +118,14 @@ app.post('/sendData', async (req, res) => {
 		ECTS: ECTS
 	};
 
-
+	anonymousData[uniqueId] = dataToSend;
 
 	const classement = Utils.createClassement(anonymousData);
 
-	// database.ref('/anonymous/' + uniqueId).update(dataToSend);
-	// database.ref('/emailsLocked/' + email).update({ locked: true });
-	// save new classement
-	// res.json({ result: uniqueId });
-	res.json({ result: dataToSend });
+	database.ref('/anonymous/' + uniqueId).update(dataToSend);
+	database.ref('/emailsLocked/' + email).update({ locked: true });
+	database.ref('/classement/').update(classement);
+	res.json({ result: uniqueId });
 })
 
 

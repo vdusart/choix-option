@@ -16,7 +16,10 @@ function Results() {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ uid: id })
 		};
-		fetch('http://localhost:8000/getInfosOf', requestOptions)
+		const backendUrl = process.env.NODE_ENV === "production"
+			? "https://backend-dot-choix-options.ew.r.appspot.com"
+			: "http://localhost:8000";
+		fetch(`${backendUrl}/getInfosOf`, requestOptions)
 			.then(async response => {
 				const data = await response.json();
 				if (data.error !== undefined) {

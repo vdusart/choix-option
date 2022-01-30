@@ -11,6 +11,10 @@ function App() {
   const [userState, setUserState] = useState(-1);
   const [tokenId, setTokenId] = useState(null);
 
+  const backendUrl = process.env.NODE_ENV === "production"
+    ? "https://backend-dot-choix-options.ew.r.appspot.com"
+    : "http://localhost:8000";
+
   let changeUser = (res) => {
     if (res == null) {
       setCurrentUser(null);
@@ -23,7 +27,7 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tokenId: res.tokenId })
     };
-    fetch('http://localhost:8000/needToImportData', requestOptions)
+    fetch(`${backendUrl}/needToImportData`, requestOptions)
       .then(async response => {
         const data = await response.json();
         setUserState(data.result);

@@ -16,7 +16,7 @@ var serviceAccount = require("./private/firebaseCreds.json");
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
-	databaseURL: "https://choix-option-default-rtdb.europe-west1.firebasedatabase.app/"
+	databaseURL: "https://choix-options-default-rtdb.europe-west1.firebasedatabase.app/"
 });
 let database = admin.database();
 
@@ -53,7 +53,7 @@ app.post('/getInfosOf', (req, res) => {
 			const findIndex = classementOfOption.findIndex(id => id == uid);
 			if (findIndex >= 0) {
 				result['possibleChoice'] = key;
-				result['classement'] = findIndex + "/" + value["size"];
+				result['classement'] = (findIndex + 1) + "/" + value["size"];
 				res.json(result);
 				return;
 			}

@@ -56,7 +56,10 @@ function Input({ tokenId }) {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ tokenId: tokenId, data: data })
 		};
-		fetch('http://localhost:8000/sendData', requestOptions)
+		const backendUrl = process.env.NODE_ENV === "production"
+			? "https://backend-dot-choix-options.ew.r.appspot.com"
+			: "http://localhost:8000";
+		fetch(`${backendUrl}/sendData`, requestOptions)
 			.then(async response => {
 				const data = await response.json();
 				setUniqueId(data.result);

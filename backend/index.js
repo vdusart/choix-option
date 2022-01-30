@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 const port = process.env.PORT || 8000;
 
+var database;
 var emailsLocked = [];
 var anonymousData = {};
 var classement = {};
@@ -40,7 +41,7 @@ async function getServiceAccount(version = 'latest') {
 		credential: admin.credential.cert(serviceAccount),
 		databaseURL: "https://choix-options-default-rtdb.europe-west1.firebasedatabase.app/"
 	});
-	var database = admin.database();
+	database = admin.database();
 
 	database.ref('/emailsLocked').on('value', (snapshot) => {
 		emailsLocked = [];

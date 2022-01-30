@@ -16,8 +16,8 @@ class Utils {
 		"MATH": { "MOD LIN": 2, "DATAMINING": 4.5, "OPTIM": 2, "EDP": 4.5 }
 	};
 
-	static choicesGSI = { "BI": 30, "Visual": 30, "INEM": 30, "Cyber": 30, "ICC": 3, "IA Pau": 30, "IA Cergy": 30, "HPDA": 30 };
-	static choicesGMI = { "BI": 30, "IA Pau": 30, "IA Cergy": 30, "HPDA": 30, "DS": 30, "Fintech": 30 };
+	static choicesGSI = { "BI": 15, "Visual": 30, "INEM": 30, "Cyber": 30, "ICC": 30, "IA Pau": 15, "IA Cergy": 30, "HPDA": 15 };
+	static choicesGMI = { "BI": 15, "IA Pau": 15, "IA Cergy": 30, "HPDA": 15, "DS": 30, "Fintech": 30 };
 
 	static generateUniqueId(anonymousData) {
 		let tmp;

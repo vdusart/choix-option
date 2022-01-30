@@ -1,5 +1,6 @@
 import { GoogleLogin } from 'react-google-login';
-import { clientId } from "./../private/firebase";
+const CLIENT_ID = '245925352495-4vrm55t1879i1848vo53dohelebpoujs.apps.googleusercontent.com';
+
 
 function Login({ setCurrentUser }) {
 	const onSuccess = (res) => {
@@ -12,7 +13,7 @@ function Login({ setCurrentUser }) {
 	return (
 		<div>
 			<GoogleLogin
-				clientId={clientId}
+				clientId={CLIENT_ID}
 				buttonText="Login"
 				onSuccess={onSuccess}
 				onFailure={onFailure}

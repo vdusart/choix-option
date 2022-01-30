@@ -1,0 +1,29 @@
+name: Deploy to Google App Engine
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy-backend:
+    name: Deploy backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: google-github-actions/deploy-appengine@v0.4.0
+        with:
+          deliverables: ./backend/app.yaml
+          credentials: ${{ secrets.gcp_credentials }}
+
+  deploy-frontend:
+    name: Deploy frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: cd frontend/ && npm install
+      - name: Build
+        run: cd frontend/ && npm run build
+      - uses: google-github-actions/deploy-appengine@v0.4.0
+        with:
+          deliverables: ./frontend/app.yaml
+          credentials: ${{ secrets.gcp_credentials }}

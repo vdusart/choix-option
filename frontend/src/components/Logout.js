@@ -1,5 +1,5 @@
 import { GoogleLogout } from 'react-google-login';
-import { clientId } from "../private/firebase";
+const CLIENT_ID = '245925352495-4vrm55t1879i1848vo53dohelebpoujs.apps.googleusercontent.com';
 
 
 function Logout({ setCurrentUser }) {
@@ -10,7 +10,7 @@ function Logout({ setCurrentUser }) {
 	return (
 		<div>
 			<GoogleLogout
-				clientId={clientId}
+				clientId={CLIENT_ID}
 				buttonText="Logout"
 				onLogoutSuccess={onSuccess}
 			/>

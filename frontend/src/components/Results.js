@@ -7,6 +7,9 @@ function Results() {
 	const [marks, setMarks] = useState([]);
 	const [classement, setClassement] = useState("?/?");
 	const [possibleChoice, setPossibleChoice] = useState("");
+	const [option, setOption] = useState("");
+	const [totalStudents, setTotalStudents] = useState(0);
+	const [studentsInOption, setStudentsInOption] = useState(0);
 	const [error, setError] = useState("");
 
 	const changeUniqueId = (id) => {
@@ -26,10 +29,13 @@ function Results() {
 					setUniqueId(null);
 					setError(data.error);
 				} else {
+					setOption(data.option);
 					setChoices(data.choices);
 					setMarks(data.marks);
 					setClassement(data.classement);
 					setPossibleChoice(data.possibleChoice);
+					setTotalStudents(data.totalStudents);
+					setStudentsInOption(data.studentsInOption);
 				}
 			})
 			.catch(error => {
@@ -42,20 +48,27 @@ function Results() {
 			{(uniqueId == null) ?
 				<InputUniqueId changeUniqueId={changeUniqueId} error={error} />
 				:
-				<DisplayResult marks={marks} choices={choices} classement={classement} possibleChoice={possibleChoice} />
+				<DisplayResult
+					option={option} marks={marks}
+					classement={classement}
+					choices={choices} possibleChoice={possibleChoice}
+					studentsInOption={studentsInOption} totalStudents={totalStudents} />
 			}
 		</div>
 	)
 }
 
-function DisplayResult({ choices, marks, classement, possibleChoice }) {
+function DisplayResult({ option, choices, marks, classement, possibleChoice, totalStudents, studentsInOption }) {
 	const choicePosition = choices.findIndex(choice => choice === possibleChoice) + 1;
 	return (
 		<div className="container">
 
-			<p>D'après nos estimations, vous êtes classés <span className="has-text-weight-bold">{classement}</span> dans votre option {choicePosition}: <span className="has-text-weight-bold">{possibleChoice}</span></p>
+			<div className="box has-background-success">
+				<p>D'après nos estimations, vous êtes classés <span className="has-text-weight-bold">{classement}</span> dans votre option {choicePosition}: <span className="has-text-weight-bold">{possibleChoice}</span></p>
+			</div>
 
 			<div className="box">
+				<h1 className="title">Vos Infos</h1>
 				<div className="columns">
 					<div className="column">
 						<p className="subtitle is-underlined">Vos Notes</p>
@@ -74,6 +87,10 @@ function DisplayResult({ choices, marks, classement, possibleChoice }) {
 						)}
 					</div>
 				</div>
+			</div>
+			<div className="box has-background-info">
+				<p className="has-text-white">Pour le moment, nous avons récupéré les données de <span className="has-text-weight-bold">{totalStudents}</span> étudiants dont <span className="has-text-weight-bold">{studentsInOption + " " + option}</span> .</p>
+				<p className="is-italic has-text-white">Plus un grand nombre de personnes entrent leurs notes, plus les résultats seront fiables.</p>
 			</div>
 		</div>
 	)

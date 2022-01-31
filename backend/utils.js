@@ -11,7 +11,7 @@ class Utils {
 	};
 
 	static subjectsGMI = {
-		"TC": { "ECE": 1, "LV1": 2.5, "MICRO": 1.5 },
+		"TC": { "ECE": 1, "LV1": 2.5, "MICRO": 1.5, "GEST FI": 1.5 },
 		"INFO": { "PROG FONC": 3.5, "DECIDABILITE": 2, "ARCH RES": 3, "METH AGIL": 1 },
 		"MATH": { "MOD LIN": 2, "DATAMINING": 4.5, "OPTIM": 2, "EDP": 4.5 }
 	};

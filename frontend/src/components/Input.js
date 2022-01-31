@@ -5,15 +5,14 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 function Input({ tokenId }) {
 	const possibleChoicesGSI = ["BI", "Visual", "INEM", "Cyber", "ICC", "IA Pau", "IA Cergy", "HPDA"];
 	const possibleChoicesGMI = ["BI", "IA Pau", "IA Cergy", "HPDA", "DS", "Fintech"];
-	const subjectsGSI = ["ECE", "LV1", "MICRO", "ARCH RES", "CYBER", "DES PAT", "JEE", "STATS", "IA", "TESTS VERIF"];
-	const subjectsGMI = ["ECE", "LV1", "MICRO", "ARCH RES", "DECIDABILITE", "METH AGIL", "PROG FONC", "DATAMINING", "EDP", "MOD LIN", "OPTIM"];
+	const subjectsGSI = ["ECE", "LV1", "MICRO", "ARCH RES", "CYBER", "DES PAT", "JEE", "TESTS VERIF", "STATS", "IA"];
+	const subjectsGMI = ["ECE", "LV1", "MICRO", "GEST FI", "ARCH RES", "DECIDABILITE", "METH AGIL", "PROG FONC", "DATAMINING", "EDP", "MOD LIN", "OPTIM"];
 
 	const [subjects, changeSubjects] = useState(subjectsGSI);
 	const [fields, setFields] = useState({});
 	const [uniqueId, setUniqueId] = useState("");
 	const [choices, updateChoices] = useState(possibleChoicesGSI);
-
-	let option = "GSI";
+	const [option, setOption] = useState("GSI");
 
 	function handleOnDragEnd(result) {
 		if (!result.destination) return;
@@ -26,7 +25,8 @@ function Input({ tokenId }) {
 	}
 
 	let changeOption = (event) => {
-		option = event.target.value;
+		const option = event.target.value;
+		setOption(option);
 		if (option === "GMI") {
 			changeSubjects(subjectsGMI);
 			updateChoices(possibleChoicesGMI);
@@ -46,6 +46,7 @@ function Input({ tokenId }) {
 
 	let submitForm = () => {
 		setUniqueId("Loading...");
+		console.log(option)
 		const data = {
 			"option": option,
 			"marks": fields,
@@ -129,7 +130,7 @@ function Input({ tokenId }) {
 							)}
 							<div className="box has-background-danger">
 								<p>Attention, une fois vos notes entrées vous ne pourrez plus les modifier.</p>
-								<p>Comme elles sont sauvegardées de manière completement anonnyme, nous ne pourrons pas le faire pour vous.</p>
+								<p>Comme elles sont sauvegardées de manière completement anonyme, nous ne pourrons pas le faire pour vous.</p>
 							</div>
 
 							<div className="field is-grouped">

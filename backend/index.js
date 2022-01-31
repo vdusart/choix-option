@@ -78,17 +78,19 @@ app.post('/getInfosOf', (req, res) => {
 	try {
 		let result = anonymousData[uid];
 		const option = result["option"];
+		result["totalStudents"] = Object.keys(anonymousData).length;
+		result["studentsInOption"] = 0;
 
 		for (const [key, value] of Object.entries(classement[option])) {
 			const classementOfOption = value["classement"] || [];
 			const findIndex = classementOfOption.findIndex(id => id == uid);
+			result["studentsInOption"] += classementOfOption.length;
 			if (findIndex >= 0) {
 				result['possibleChoice'] = key;
 				result['classement'] = (findIndex + 1) + "/" + value["size"];
-				res.json(result);
-				return;
 			}
 		}
+		res.json(result);
 
 	} catch (error) {
 		res.json({ error: "Incorrect id" })

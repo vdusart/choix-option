@@ -59,7 +59,8 @@ class Utils {
 
 		for (const [key, value] of Object.entries(marks)) {
 			try {
-				const mark = parseInt(value, 10) || -1;
+				let mark = parseInt(value, 10);
+				mark = isNaN(mark) ? -1 : mark;
 				if (mark < 0 || mark > 20) {
 					return false;
 				}

@@ -87,7 +87,7 @@ app.post('/getInfosOf', (req, res) => {
 			result["studentsInOption"] += classementOfOption.length;
 			if (findIndex >= 0) {
 				result['possibleChoice'] = key;
-				result['classement'] = (findIndex + 1) + "/" + value["size"];
+				result['classement'] = (findIndex + 1) + "/" + classementOfOption.length + " (" + value["size"] + " places)";
 			}
 		}
 		res.json(result);

@@ -2,10 +2,6 @@ const express = require('express');
 var admin = require('firebase-admin');
 const cors = require('cors');
 const Utils = require('./utils');
-const { OAuth2Client } = require('google-auth-library');
-const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
-const secretClient = new SecretManagerServiceClient();
-const GOOGLE_CLOUD_PROJECT = process.env.GOOGLE_CLOUD_PROJECT || "choix-options";
 
 
 const app = express();
@@ -18,59 +14,34 @@ var emailsLocked = [];
 var anonymousData = {};
 var classement = {};
 
-// -----------------------------------------------------
-// ------------------Getting secrets--------------------
-// -----------------------------------------------------
 
+var serviceAccount = require("./private/firebaseCreds.json");
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+	databaseURL: "https://choix-options-default-rtdb.europe-west1.firebasedatabase.app/"
+});
+database = admin.database();
 
-async function getClientID(version = 'latest') {
-	const [accessResponse] = await secretClient.accessSecretVersion({
-		name: `projects/${GOOGLE_CLOUD_PROJECT}/secrets/CLIENT_ID/versions/${version}`,
+database.ref('/emailsLocked').on('value', (snapshot) => {
+	emailsLocked = [];
+	snapshot.forEach((i) => {
+		emailsLocked.push(i.key);
 	});
-	Utils.CLIENT_ID = accessResponse.payload.data.toString('utf8');
-	Utils.client = new OAuth2Client(Utils.CLIENT_ID);
-}
+})
 
-async function getServiceAccount(version = 'latest') {
-	const [accessResponse] = await secretClient.accessSecretVersion({
-		name: `projects/${GOOGLE_CLOUD_PROJECT}/secrets/firebaseCreds/versions/${version}`,
+database.ref('/anonymous').on('value', (snapshot) => {
+	anonymousData = {};
+	snapshot.forEach((i) => {
+		anonymousData[i.key] = i.val();
 	});
-	// var serviceAccount = require("./private/firebaseCreds.json");
-	var serviceAccount = JSON.parse(accessResponse.payload.data.toString('utf8'));
-	admin.initializeApp({
-		credential: admin.credential.cert(serviceAccount),
-		databaseURL: "https://choix-options-default-rtdb.europe-west1.firebasedatabase.app/"
+})
+
+database.ref('/classement').on('value', (snapshot) => {
+	classement = {};
+	snapshot.forEach((i) => {
+		classement[i.key] = i.val();
 	});
-	database = admin.database();
-
-	database.ref('/emailsLocked').on('value', (snapshot) => {
-		emailsLocked = [];
-		snapshot.forEach((i) => {
-			emailsLocked.push(i.key);
-		});
-	})
-
-	database.ref('/anonymous').on('value', (snapshot) => {
-		anonymousData = {};
-		snapshot.forEach((i) => {
-			anonymousData[i.key] = i.val();
-		});
-	})
-
-	database.ref('/classement').on('value', (snapshot) => {
-		classement = {};
-		snapshot.forEach((i) => {
-			classement[i.key] = i.val();
-		});
-	})
-}
-
-getClientID();
-getServiceAccount();
-
-// -----------------------------------------------------
-// -------------------End of secrets--------------------
-// -----------------------------------------------------
+})
 
 
 app.post('/getInfosOf', (req, res) => {

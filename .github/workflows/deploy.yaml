@@ -9,6 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Getting private data
+        run: 'mkdir backend/private/ && echo "$FIREBASE_SECRET" > backend/private/firebaseCreds.json && echo "$CLIENTID" > backend/private/clientId.js'
+        shell: bash
+        env:
+          FIREBASE_SECRET: ${{ secrets.FIREBASECREDS }}
+          CLIENTID: ${{ secrets.CLIENTID }}
       - uses: google-github-actions/deploy-appengine@v0.4.0
         with:
           deliverables: ./backend/app.yaml

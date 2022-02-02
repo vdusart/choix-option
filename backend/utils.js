@@ -1,8 +1,10 @@
+const { OAuth2Client } = require('google-auth-library');
+const CLIENT_ID = require('./private/clientId');
+const client = new OAuth2Client(CLIENT_ID);
+
+
 
 class Utils {
-
-	static CLIENT_ID;
-	static client;
 
 	static subjectsGSI = {
 		"TC": { "ECE": 1, "LV1": 2.5, "MICRO": 1.5 },
@@ -33,9 +35,9 @@ class Utils {
 			"email": ""
 		}
 		try {
-			const ticket = await this.client.verifyIdToken({
+			const ticket = await client.verifyIdToken({
 				idToken: token,
-				audience: this.CLIENT_ID,
+				audience: CLIENT_ID,
 			});
 			const payload = ticket.getPayload();
 			const email = payload.email;

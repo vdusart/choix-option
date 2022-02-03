@@ -18,8 +18,8 @@ class Utils {
 		"MATH": { "MOD LIN": 2, "DATAMINING": 4.5, "OPTIM": 2, "EDP": 4.5 }
 	};
 
-	static choicesGSI = { "BI": 15, "Visual": 30, "INEM": 30, "Cyber": 30, "ICC": 30, "IA Pau": 15, "IA Cergy": 30, "HPDA": 15 };
-	static choicesGMI = { "BI": 15, "IA Pau": 15, "IA Cergy": 30, "HPDA": 15, "DS": 30, "Fintech": 30 };
+	static choicesGSI = { "BI": 17, "Visual": 35, "INEM": 35, "Cyber": 60, "ICC": 35, "IA Pau": 18, "IA Cergy": 30, "HPDA": 17 };
+	static choicesGMI = { "BI": 18, "IA Pau": 17, "IA Cergy": 30, "HPDA": 18, "DS": 35, "Fintech": 35 };
 
 	static generateUniqueId(anonymousData) {
 		let tmp;
@@ -95,13 +95,15 @@ class Utils {
 		for (const UE in subjects) {
 			let meanInUE = 0;
 			let coefOfUE = 0;
+			let coefOfPassedSubjects = 0;
 			for (const subject in subjects[UE]) {
 				const mark = marks[subject];
 				const coef = subjects[UE][subject];
 				meanInUE += mark * coef;
 				coefOfUE += coef;
+				coefOfPassedSubjects += (mark >= 10) ? coef : 0;
 			}
-			ECTS += (meanInUE / coefOfUE >= 10) ? coefOfUE : 0;
+			ECTS += (meanInUE / coefOfUE >= 10) ? coefOfUE : coefOfPassedSubjects;
 			mean += meanInUE;
 			totalCoef += coefOfUE;
 		}

@@ -9,10 +9,10 @@ Si vous rencontrez un probleme n'hesitez pas à me contacter par mail: dusartvic
 
 |       | BI  | Visual | INEM | Cyber | ICC | IA Pau | IA Cergy | HPDA | DS  | Fintech |
 | :---: | :-: | :----: | :--: | :---: | :-: | :----: | :------: | :--: | :-: | :-----: |
-|  GSI  | 15  |   30   |  30  |  30   | 30  |   15   |    30    |  15  |  X  |    X    |
-|  GMI  | 15  |   X    |  X   |   X   |  X  |   15   |    30    |  15  | 30  |   30    |
+|  GSI  | 17  |   35   |  35  |  60   | 35  |   18   |    30    |  17  |  X  |    X    |
+|  GMI  | 18  |   X    |  X   |   X   |  X  |   17   |    30    |  18  | 35  |   35    |
 |       |     |        |      |       |     |        |          |      |     |         |
-| Total | 30  |   30   |  30  |  30   | 30  |   30   |    60    |  30  | 30  |   30    |
+| Total | 35  |   35   |  35  |  60   | 35  |   35   |    60    |  35  | 35  |   35    |
 
 Quand une option est repartie entre 2 parcours (GSI, GMI), j'ai considéré que les places etaient repartient équitablement (50/50) entre les parcours.
 

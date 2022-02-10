@@ -13,6 +13,7 @@ var database;
 var emailsLocked = [];
 var anonymousData = {};
 var classement = {};
+var allEmailDataScrapped = false;
 
 
 var serviceAccount = require("./private/firebaseCreds.json");
@@ -27,6 +28,7 @@ database.ref('/emailsLocked').on('value', (snapshot) => {
 	snapshot.forEach((i) => {
 		emailsLocked.push(i.key);
 	});
+	allEmailDataScrapped = true;
 })
 
 database.ref('/anonymous').on('value', (snapshot) => {
@@ -72,7 +74,7 @@ app.post('/needToImportData', async (req, res) => {
 	const tokenId = req.body.tokenId;
 	const result = await Utils.isTokenValid(tokenId);
 	const emailPrefix = result.email.split('@')[0];
-	const needToImportData = (!result.isValid) ? 0 : (!emailsLocked.includes(emailPrefix) ? 1 : 2);
+	const needToImportData = (!allEmailDataScrapped) ? 3 : (!result.isValid) ? 0 : (!emailsLocked.includes(emailPrefix) ? 1 : 2);
 	res.json({ result: needToImportData })
 })
 
